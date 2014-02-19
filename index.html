@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Hadoop M-R 简介</title>
+
+		<meta name="description" content="BigData培训资料（一）">
+		<meta name="author" content="zhanghuabin">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+
+				<section>
+					<p><span class="commonhead commonmenu">Hadoop M-R 简介</span></p>
+					</br> 
+					</br>
+					<p class="commonright">姓名：<a href="#">张华彬</a></p>
+					<p class="commonright">日期：<a href="#"><font face="comic sans ms">2014-02-20</font></a></p>
+					<iframe src="http://ghbtns.com/github-btn.html?user=zhanghuabin&repo=bd-hadoop-mr-intro&type=fork"
+					  allowtransparency="true" frameborder="0" scrolling="0" width="132" height="20"></iframe>
+					<iframe src="http://ghbtns.com/github-btn.html?user=zhanghuabin&repo=bd-hadoop-mr-intro&type=watch"
+					  allowtransparency="true" frameborder="0" scrolling="0" width="165" height="20"></iframe>
+					
+				</section>
+
+				<section>
+					<h2 class="commontitle commongreen commoncsm">（一） 基本原理</h2>
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">计算模型：分治与归约</h2>
+					<img src="img/mapred-model.png"  alt="处理流程图" />
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">InputFormat</h3>
+					<img src="img/mapred-model-2.png"  alt="InputFormat" />
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Mapper/Combiner</h3>
+					<img src="img/mapred-model-3.png"  alt="Mapper/Combiner" />
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Sampler/Partitioner</h3>
+					<img src="img/mapred-model-4.png"  alt="Sampler/Partitioner" />
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Reducer</h3>
+					<img src="img/mapred-model-5.png"  alt="Reducer" />
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">OutputFormat</h3>
+					<img src="img/mapred-model-6.png"  alt="OutputFormat" />
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">M-R Job 职责划分</h3>
+					<img src="img/mapred-job-lc.png"  alt="M-R Job 职责划分" />
+				</section>
+
+
+				<section>
+					<h2 class="commontitle commongreen commoncsm">（二） 环境准备</h2>
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Hadoop Distribution</h3>
+					<ol>
+						<li class="fragment commoncsm">Cloudera</li>
+						<li class="fragment commoncsm">HortonWorks</li>
+						<li class="fragment commoncsm">AWS EMR</li>
+					</ol>
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Local Dev Environment</h3>
+					<ol>
+						<li class="fragment commoncsm">VMWare / VirtualBox</li>
+						<li class="fragment commoncsm">CDH 4.4.0-1 QuickStart / HortonWorks 2.0</li>
+						<li class="fragment commoncsm">Windows+Cygwin / Linux / Mac</li>
+						<li class="fragment commoncsm">Configure no-pwd SSH logon</li>
+					</ol>
+				</section>
+
+
+				<section>
+					<h2 class="commontitle commongreen commoncsm">（三） 示例：单表连接</h2>
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">目标：查找祖孙关系</h3>
+					<pre><code contenteditable>Tom,Lucy
+Tom,Jack
+Jone,Lucy
+Jone,Jack
+Lucy,Mary
+Lucy,Ben
+Jack,Alice
+Jack,Jesse
+Terry,Alice
+Terry,Jesse
+Philip,Terry
+Philip,Alma
+Mark,Terry
+Mark,Alma</code></pre>
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">设计思路</h3>
+					<ol>
+						<li class="fragment commoncsm">看作左右两张表[Child, Parent]和[Child, Parent]</li>
+						<li class="fragment commoncsm">左表的Parent与右表的Child连接</li>
+						<li class="fragment commoncsm">去掉连接的两个字段然后输出</li>
+						<li class="fragment commoncsm">Shuffle阶段会把相同Key的Value放到一起</li>
+						<li class="fragment commoncsm">所以把待连接的两个字段作为Key在Mapper中输出即可</li>
+						<li class="fragment commoncsm">Mapper输出的Value要根据Key是Parent还是Child打上标记以供Combiner去冗余和Reducer输出最终结果</li>
+						<li class="fragment commoncsm">被Combiner去冗余后，Reducer拿到的都是符合祖孙关系的Key-Values</li>
+						<li class="fragment commoncsm">Reducer需要从Values中将左表的Child和右表的Parent分别置入一个列表，然后对这两个列表求笛卡尔积即为最终结果</li>
+					</ol>
+				</section>
+
+
+				<section>
+					<h2 class="commontitle commongreen commoncsm">（四） 参考实现</h2>
+				</section>
+
+				<section>
+					<h2 class="commontitle commongreen commoncsm">（五） Q&A</h2>
+				</section>
+
+				<section>
+					<h1 class="exclusive">「谢谢」</h1>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme,
+				transition: Reveal.getQueryHash().transition || 'default',
+				dependencies: [
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
