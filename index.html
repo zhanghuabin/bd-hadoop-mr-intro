@@ -125,6 +125,53 @@ Mark,Alma</code></pre>
 						<li class="fragment commoncsm">Reducer需要从Values中将左表的Child和右表的Parent分别置入一个列表，然后对这两个列表求笛卡尔积即为最终结果</li>
 					</ol>
 				</section>
+				<section>
+					<h3 class="commontitle commongreen">Diagram 1</h3>
+					<img src="img/mapred-model-7.png"  alt="左右表" />
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Diagram 2</h3>
+					<img src="img/mapred-model-8.png"  alt="连接Child和Parent" />
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Diagram 3</h3>
+					<ol>
+						<li class="fragment commoncsm">
+							<h3 class="commontitle commongreen">第一行</h3>
+							<img src="img/mapred-model-9.png"  alt="第一行数据" />
+						</li>
+						<li class="fragment commoncsm">
+							<h3 class="commontitle commongreen">分别以Child和Parent做Key输出这一行，并加上一个用于区分左右表的标志</h3>
+							<img src="img/mapred-model-10.png"  alt="输出两个Key-Value Pair，代表左右表各一行" />
+						</li>
+					</ol>
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Diagram 4</h3>
+					<ol>
+						<li class="fragment commoncsm">
+							<h3 class="commontitle commongreen">Shuffle/Order时会把Key相同的Value放到一起</h3>
+							<img src="img/mapred-model-11.png"  alt="Key-Values" />
+						</li>
+						<li class="fragment commoncsm">
+							<h3 class="commontitle commongreen">从左表（1）得到Grand Child，从右表（0）得到Grand Parent，分别置入各自的一个List</h3>
+							<img src="img/mapred-model-12.png"  alt="获取Grand Children和Grand Parents列表" />
+						</li>
+					</ol>
+				</section>
+				<section>
+					<h3 class="commontitle commongreen">Diagram 5</h3>
+					<ol>
+						<li class="fragment commoncsm">
+							<h3 class="commontitle commongreen">Grand Children / Grand Parents</h3>
+							<img src="img/mapred-model-13.png"  alt="Grand Children / Grand Parents" />
+						</li>
+						<li class="fragment commoncsm">
+							<h3 class="commontitle commongreen">笛卡尔积</h3>
+							<img src="img/mapred-model-14.png"  alt="笛卡尔积" />
+						</li>
+					</ol>
+				</section>
 
 
 				<section>
